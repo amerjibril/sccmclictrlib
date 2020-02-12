@@ -136,6 +136,30 @@ namespace smsclictr.automation
         }
 
         /// <summary>
+        /// Check if File Exists
+        /// </summary>
+        /// <param name="FilePath"></param>
+        /// <returns>True = File exists</returns>
+        public Boolean FileExist(string FilePath)
+        {
+            if (!string.IsNullOrEmpty(FilePath))
+            {
+                try
+                {
+                    WMIProvider oProv = new WMIProvider(oWMIProvider.mScope.Clone());
+                    FilePath = FilePath.Replace(@"\", @"\\");
+                    ManagementObjectCollection MOC = oProv.ExecuteQuery("SELECT * FROM CIM_Datafile WHERE Name = '" + FilePath + "'");
+                    foreach (ManagementObject MO in MOC)
+                    {
+                        return true;
+                    }
+                }
+                catch { }
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Delete multiple Files
         /// </summary>
         /// <param name="Drive">Disk Drive like 'c:'</param>
